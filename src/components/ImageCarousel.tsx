@@ -9,15 +9,17 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
+import { getPetImageSource } from '../constants/images';
 
 const { width } = Dimensions.get('window');
 
 type Props = {
   images: string[];
+  petId: string;
   height?: number;
 };
 
-export function ImageCarousel({ images, height = 320 }: Props) {
+export function ImageCarousel({ images, petId, height = 320 }: Props) {
   const { colors, radius } = useTheme();
   const [index, setIndex] = useState(0);
   const listRef = useRef<FlatList<string>>(null);
@@ -38,7 +40,10 @@ export function ImageCarousel({ images, height = 320 }: Props) {
         keyExtractor={(_, i) => String(i)}
         onScroll={onScroll}
         renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={{ width, height, borderRadius: radius.lg }} />
+          <Image
+            source={getPetImageSource(petId, item)}
+            style={{ width, height, borderRadius: radius.lg }}
+          />
         )}
       />
       <View style={styles.dots}>

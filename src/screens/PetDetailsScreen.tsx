@@ -47,7 +47,7 @@ export default function PetDetailsScreen() {
     <View style={[globalStyles.screen, { backgroundColor: colors.background }]}>
       <Header title={pet.name} showBack onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <ImageCarousel images={pet.images} />
+        <ImageCarousel images={pet.images} petId={pet.id} />
         <View style={[globalStyles.screenPadding, { marginTop: spacing.lg }]}>
           <View style={styles.titleRow}>
             <View style={{ flex: 1 }}>

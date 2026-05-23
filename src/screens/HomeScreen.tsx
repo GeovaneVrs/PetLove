@@ -23,6 +23,8 @@ import { CategoryFilter } from '../components/CategoryFilter';
 import { PetCard } from '../components/PetCard';
 import { SectionTitle } from '../components/SectionTitle';
 import { Loading } from '../components/Loading';
+import { EmptyState } from '../components/EmptyState';
+import { useDebounce } from '../hooks/useDebounce';
 import { globalStyles } from '../styles/global';
 
 export default function HomeScreen() {
@@ -31,12 +33,32 @@ export default function HomeScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<PetCategory | 'all'>('all');
-  const [featured, setFeatured] = useState<Pet[]>([]);
+  const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
+  const debouncedQuery = useDebounce(query);
+
+  const isFiltering = debouncedQuery.trim().length > 0 || category !== 'all';
 
   useEffect(() => {
-    petService.getFeatured().then(setFeatured).finally(() => setLoading(false));
-  }, []);
+    let cancelled = false;
+    setLoading(true);
+
+    const loadPets = async () => {
+      const results = isFiltering
+        ? await petService.search(debouncedQuery, category)
+        : await petService.getFeatured();
+
+      if (!cancelled) {
+        setPets(results);
+        setLoading(false);
+      }
+    };
+
+    loadPets();
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, category, isFiltering]);
 
   const openDetails = useCallback(
     (petId: string) => navigation.navigate(ROUTES.PET_DETAILS, { petId }),
@@ -77,17 +99,35 @@ export default function HomeScreen() {
 
         <CategoryFilter selected={category} onSelect={setCategory} />
 
-        <SectionTitle title="Em destaque" actionLabel="Ver todos" onAction={goToPets} />
+        <SectionTitle
+          title={isFiltering ? 'Resultados da busca' : 'Em destaque'}
+          actionLabel="Ver todos"
+          onAction={goToPets}
+        />
 
         {loading ? (
           <Loading />
         ) : (
           <FlatList
             horizontal
-            data={featured}
+            data={pets}
             keyExtractor={(item) => item.id}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: spacing.md, paddingBottom: spacing.lg }}
+            contentContainerStyle={[
+              { gap: spacing.md, paddingBottom: spacing.lg },
+              pets.length === 0 && { flexGrow: 1, minWidth: '100%' },
+            ]}
+            ListEmptyComponent={
+              <View style={{ width: 280 }}>
+                <EmptyState
+                  icon="search-outline"
+                  title="Nenhum pet encontrado"
+                  description="Tente outro nome, espécie ou categoria."
+                  actionLabel="Ver todos os pets"
+                  onAction={goToPets}
+                />
+              </View>
+            }
             renderItem={({ item }) => (
               <View style={{ width: 280, height: 300 }}>
                 <PetCard

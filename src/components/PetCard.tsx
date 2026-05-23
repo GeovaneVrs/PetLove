@@ -5,6 +5,7 @@ import type { Pet } from '../types';
 import { useTheme } from '../theme/ThemeProvider';
 import { FavoriteButton } from './FavoriteButton';
 import { truncate } from '../utils/format';
+import { getPetImageSource } from '../constants/images';
 
 const FEATURED_HEIGHT = 300;
 const FEATURED_IMAGE_HEIGHT = 136;
@@ -53,7 +54,7 @@ function PetCardComponent({ pet, onPress, compact, featured }: Props) {
       >
         {!imageError ? (
           <Image
-            source={{ uri: pet.images[0] }}
+            source={getPetImageSource(pet.id, pet.images[0])}
             style={styles.imageFill}
             resizeMode="cover"
             onError={() => setImageError(true)}
