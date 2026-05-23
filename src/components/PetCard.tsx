@@ -100,7 +100,7 @@ function PetCardComponent({ pet, onPress, compact, featured }: Props) {
         <View style={styles.meta}>
           <Ionicons name="location-outline" size={14} color={colors.textMuted} />
           <Text style={[typography.caption, { color: colors.textMuted }]} numberOfLines={1}>
-            {pet.location}
+            {pet.shelterName}
           </Text>
         </View>
 

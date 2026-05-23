@@ -1,19 +1,88 @@
-import React from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  ActionSheetIOS,
+  Alert,
+  Image,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { MOCK_USER } from '../data/user';
 import { ROUTES } from '../constants/routes';
 import type { RootStackParamList } from '../navigation/types';
 import { useFavoritesStore } from '../store/favorites.store';
+import { useProfileStore } from '../store/profile.store';
 import { useTheme } from '../theme/ThemeProvider';
-import { globalStyles } from '../styles/global';
 
 export default function ProfileScreen() {
   const { colors, spacing, typography, radius, shadows } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const favCount = useFavoritesStore((s) => s.ids.length);
+  const avatarUri = useProfileStore((s) => s.avatarUri);
+  const hydrateProfile = useProfileStore((s) => s.hydrate);
+  const setAvatarUri = useProfileStore((s) => s.setAvatarUri);
+
+  useEffect(() => {
+    hydrateProfile();
+  }, [hydrateProfile]);
+
+  const pickFromCamera = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permissão necessária', 'Ative o acesso à câmera nas configurações.');
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets[0]) {
+      await setAvatarUri(result.assets[0].uri);
+    }
+  };
+
+  const pickFromGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permissão necessária', 'Ative o acesso à galeria nas configurações.');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets[0]) {
+      await setAvatarUri(result.assets[0].uri);
+    }
+  };
+
+  const onChangePhoto = () => {
+    const options = ['Tirar foto', 'Escolher da galeria', 'Cancelar'];
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        { options, cancelButtonIndex: 2 },
+        (index) => {
+          if (index === 0) pickFromCamera();
+          if (index === 1) pickFromGallery();
+        },
+      );
+    } else {
+      Alert.alert('Foto de perfil', 'Escolha uma opção', [
+        { text: 'Tirar foto', onPress: pickFromCamera },
+        { text: 'Galeria', onPress: pickFromGallery },
+        { text: 'Cancelar', style: 'cancel' },
+      ]);
+    }
+  };
 
   const stats = [
     { label: 'Favoritos', value: favCount, icon: 'heart' as const },
@@ -27,15 +96,20 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <ScrollView style={[globalStyles.screen, { backgroundColor: colors.background }]}>
+    <ScrollView style={{ flex: 1, backgroundColor: colors.background }}>
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
-        <Image source={{ uri: MOCK_USER.avatar }} style={styles.avatar} />
+        <Pressable onPress={onChangePhoto} style={styles.avatarWrap}>
+          <Image source={{ uri: avatarUri }} style={styles.avatar} />
+          <View style={styles.cameraBadge}>
+            <Ionicons name="camera" size={18} color="#FFF" />
+          </View>
+        </Pressable>
         <Text style={styles.name}>{MOCK_USER.name}</Text>
         <Text style={styles.email}>{MOCK_USER.email}</Text>
         <Text style={styles.bio}>{MOCK_USER.bio}</Text>
       </View>
 
-      <View style={[globalStyles.screenPadding, { marginTop: -spacing.xl }]}>
+      <View style={{ paddingHorizontal: 16, marginTop: -spacing.xl }}>
         <View style={[styles.statsRow, shadows.md, { backgroundColor: colors.surface, borderRadius: radius.lg }]}>
           {stats.map((s) => (
             <View key={s.label} style={styles.statItem}>
@@ -63,8 +137,8 @@ export default function ProfileScreen() {
           </Pressable>
         ))}
 
-        <Text style={[typography.caption, { color: colors.textMuted, textAlign: 'center', marginTop: spacing.xxl }]}>
-          Membro desde {MOCK_USER.memberSince}
+        <Text style={[typography.caption, { color: colors.textMuted, textAlign: 'center', marginTop: spacing.xxl, marginBottom: spacing.xxl }]}>
+          Membro desde {MOCK_USER.memberSince} · Recife, PE
         </Text>
       </View>
     </ScrollView>
@@ -73,7 +147,21 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   header: { alignItems: 'center', paddingTop: 48, paddingBottom: 48, paddingHorizontal: 24 },
+  avatarWrap: { position: 'relative' },
   avatar: { width: 96, height: 96, borderRadius: 48, borderWidth: 3, borderColor: '#FFF' },
+  cameraBadge: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#2563EB',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#FFF',
+  },
   name: { color: '#FFF', fontSize: 22, fontWeight: '700', marginTop: 12 },
   email: { color: '#DBEAFE', fontSize: 14, marginTop: 4 },
   bio: { color: '#E0E7FF', fontSize: 14, textAlign: 'center', marginTop: 12 },

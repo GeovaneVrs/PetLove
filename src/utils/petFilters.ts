@@ -12,7 +12,9 @@ export function filterPets(
       !normalized ||
       pet.name.toLowerCase().includes(normalized) ||
       pet.species.toLowerCase().includes(normalized) ||
-      pet.location.toLowerCase().includes(normalized);
+      pet.location.toLowerCase().includes(normalized) ||
+      pet.shelterName.toLowerCase().includes(normalized) ||
+      pet.shelterAddress.toLowerCase().includes(normalized);
     return matchesCategory && matchesQuery;
   });
 }

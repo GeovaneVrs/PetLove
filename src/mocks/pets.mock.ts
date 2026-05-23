@@ -1,7 +1,19 @@
 import type { Pet } from '../types';
 import { petImage } from '../constants/images';
+import { RECIFE_SHELTERS } from '../constants/shelters';
 
 const img = (id: string, category: Pet['category']) => petImage(id, category);
+
+const shelter = (index: number) => {
+  const s = RECIFE_SHELTERS[index % RECIFE_SHELTERS.length];
+  return {
+    location: 'Recife, PE',
+    shelterName: s.name,
+    shelterAddress: s.address,
+    latitude: s.latitude,
+    longitude: s.longitude,
+  };
+};
 
 export const MOCK_PETS: Pet[] = [
   {
@@ -12,7 +24,7 @@ export const MOCK_PETS: Pet[] = [
     age: '2 anos',
     size: 'large',
     gender: 'female',
-    location: 'São Paulo, SP',
+    ...shelter(0),
     description:
       'Luna é carinhosa, adora brincar no parque e é ótima com crianças. Busca uma família ativa e amorosa.',
     personality: ['Carinhosa', 'Brincalhona', 'Sociável'],
@@ -30,7 +42,7 @@ export const MOCK_PETS: Pet[] = [
     age: '3 anos',
     size: 'large',
     gender: 'male',
-    location: 'Campinas, SP',
+    ...shelter(1),
     description: 'Thor é leal e inteligente. Já sabe comandos básicos e adora nadar.',
     personality: ['Leal', 'Inteligente', 'Ativo'],
     images: [img('2', 'dog')],
@@ -47,7 +59,7 @@ export const MOCK_PETS: Pet[] = [
     age: '1 ano',
     size: 'small',
     gender: 'female',
-    location: 'Santos, SP',
+    ...shelter(2),
     description: 'Mia é elegante e curiosa. Gosta de lugares altos e carinho na barriga.',
     personality: ['Curiosa', 'Afetuosa', 'Independente'],
     images: [img('3', 'cat')],
@@ -64,7 +76,7 @@ export const MOCK_PETS: Pet[] = [
     age: '4 anos',
     size: 'medium',
     gender: 'male',
-    location: 'Guarulhos, SP',
+    ...shelter(3),
     description: 'Simba foi resgatado das ruas e hoje é um cão dócil que merece um lar.',
     personality: ['Dócil', 'Grato', 'Calmo'],
     images: [img('4', 'dog')],
@@ -81,7 +93,7 @@ export const MOCK_PETS: Pet[] = [
     age: '2 anos',
     size: 'small',
     gender: 'female',
-    location: 'São Paulo, SP',
+    ...shelter(4),
     description: 'Nina adora sonecas ao sol e convive bem com outros gatos.',
     personality: ['Calma', 'Elegante', 'Paciente'],
     images: [img('5', 'cat')],
@@ -98,7 +110,7 @@ export const MOCK_PETS: Pet[] = [
     age: '6 meses',
     size: 'small',
     gender: 'female',
-    location: 'Osasco, SP',
+    ...shelter(5),
     description: 'Pipoca canta melodias e gosta de interação. Ideal para apartamento.',
     personality: ['Alegre', 'Vocal', 'Sociável'],
     images: [img('6', 'bird')],
@@ -115,7 +127,7 @@ export const MOCK_PETS: Pet[] = [
     age: '1 ano',
     size: 'small',
     gender: 'male',
-    location: 'Sorocaba, SP',
+    ...shelter(0),
     description: 'Coco é tranquilo e adora cenouras. Perfeito para famílias com espaço.',
     personality: ['Tranquilo', 'Tímido', 'Fofo'],
     images: [img('7', 'rabbit')],
@@ -132,7 +144,7 @@ export const MOCK_PETS: Pet[] = [
     age: '5 anos',
     size: 'medium',
     gender: 'male',
-    location: 'São Paulo, SP',
+    ...shelter(1),
     description: 'Max é companheiro ideal para apartamento. Adora colo e passeios curtos.',
     personality: ['Companheiro', 'Divertido', 'Calmo'],
     images: [img('8', 'dog')],
@@ -149,7 +161,7 @@ export const MOCK_PETS: Pet[] = [
     age: '3 anos',
     size: 'medium',
     gender: 'female',
-    location: 'Ribeirão Preto, SP',
+    ...shelter(2),
     description: 'Mel é independente mas adora carinho no fim do dia.',
     personality: ['Independente', 'Carinhosa', 'Esperta'],
     images: [img('9', 'cat')],
@@ -166,7 +178,7 @@ export const MOCK_PETS: Pet[] = [
     age: '2 anos',
     size: 'medium',
     gender: 'male',
-    location: 'São José dos Campos, SP',
+    ...shelter(3),
     description: 'Buddy tem faro apurado e energia de sobra. Ótimo para famílias ativas.',
     personality: ['Energético', 'Curioso', 'Amigável'],
     images: [img('10', 'dog')],
@@ -183,7 +195,7 @@ export const MOCK_PETS: Pet[] = [
     age: '4 anos',
     size: 'large',
     gender: 'female',
-    location: 'São Paulo, SP',
+    ...shelter(4),
     description: 'Kiara é majestosa e gentil. Convive bem com cães sociáveis.',
     personality: ['Gentil', 'Majestosa', 'Inteligente'],
     images: [img('11', 'cat')],
@@ -200,7 +212,7 @@ export const MOCK_PETS: Pet[] = [
     age: '8 anos',
     size: 'medium',
     gender: 'male',
-    location: 'São Paulo, SP',
+    ...shelter(5),
     description: 'Fred repete palavras e adora interação humana diária.',
     personality: ['Inteligente', 'Falador', 'Afetuoso'],
     images: [img('12', 'other')],

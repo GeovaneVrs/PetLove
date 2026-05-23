@@ -13,6 +13,10 @@ export interface Pet {
   size: PetSize;
   gender: PetGender;
   location: string;
+  shelterName: string;
+  shelterAddress: string;
+  latitude: number;
+  longitude: number;
   description: string;
   personality: string[];
   images: string[];

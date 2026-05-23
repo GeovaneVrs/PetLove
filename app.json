@@ -17,6 +17,21 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "O PetLove usa sua localização para mostrar a distância até os abrigos em Recife."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O PetLove acessa suas fotos para atualizar o perfil.",
+          "cameraPermission": "O PetLove usa a câmera para tirar sua foto de perfil."
+        }
+      ]
+    ]
   }
 }

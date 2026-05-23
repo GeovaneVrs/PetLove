@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -9,8 +9,10 @@ import { ROUTES } from '../constants/routes';
 import type { RootStackParamList } from '../navigation/types';
 import type { Pet } from '../types';
 import { useTheme } from '../theme/ThemeProvider';
+import { useUserLocation } from '../hooks/useUserLocation';
 import { Header } from '../components/Header';
 import { ImageCarousel } from '../components/ImageCarousel';
+import { PetShelterMap } from '../components/PetShelterMap';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { Button } from '../components/Button';
 import { Loading } from '../components/Loading';
@@ -21,6 +23,7 @@ export default function PetDetailsScreen() {
   const { colors, spacing, typography, radius, shadows } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, typeof ROUTES.PET_DETAILS>>();
+  const { coords, loading: locLoading, error: locError, refresh } = useUserLocation();
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +33,12 @@ export default function PetDetailsScreen() {
       setLoading(false);
     });
   }, [route.params.petId]);
+
+  const openExternalMaps = () => {
+    if (!pet) return;
+    const url = `https://www.google.com/maps/search/?api=1&query=${pet.latitude},${pet.longitude}`;
+    Linking.openURL(url);
+  };
 
   if (loading) return <Loading fullScreen />;
   if (!pet) return null;
@@ -65,6 +74,44 @@ export default function PetDetailsScreen() {
               </View>
             ))}
           </View>
+
+          <SectionTitle title="Abrigo em Recife" />
+          <View
+            style={[
+              styles.shelterCard,
+              shadows.sm,
+              { backgroundColor: colors.surface, borderRadius: radius.md },
+            ]}
+          >
+            <Ionicons name="business-outline" size={22} color={colors.primary} />
+            <View style={{ flex: 1, marginLeft: spacing.sm }}>
+              <Text style={[typography.h3, { color: colors.text }]}>{pet.shelterName}</Text>
+              <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>
+                {pet.shelterAddress}
+              </Text>
+            </View>
+          </View>
+
+          {locError ? (
+            <Pressable onPress={refresh} style={styles.locHint}>
+              <Text style={[typography.caption, { color: colors.accent }]}>
+                {locError} Toque para tentar novamente.
+              </Text>
+            </Pressable>
+          ) : locLoading ? (
+            <Text style={[typography.caption, { color: colors.textMuted, marginBottom: spacing.sm }]}>
+              Obtendo sua localização (GPS)...
+            </Text>
+          ) : null}
+
+          <PetShelterMap pet={pet} userCoords={coords} />
+
+          <Button
+            label="Abrir rota no Maps"
+            variant="outline"
+            onPress={openExternalMaps}
+            style={{ marginBottom: spacing.lg }}
+          />
 
           <SectionTitle title="Sobre" />
           <Text style={[typography.body, { color: colors.textSecondary }]}>{pet.description}</Text>
@@ -104,6 +151,13 @@ const styles = StyleSheet.create({
   titleRow: { flexDirection: 'row', alignItems: 'flex-start' },
   statsRow: { flexDirection: 'row', gap: 10, marginVertical: 16 },
   stat: { flex: 1, alignItems: 'center', padding: 12 },
+  shelterCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: 14,
+    marginBottom: 12,
+  },
+  locHint: { marginBottom: 8 },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
   tag: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   tipRow: { flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 8 },
