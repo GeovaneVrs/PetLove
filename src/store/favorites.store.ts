@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 import { favoriteService } from '../services/favorite.service';
-import { MOCK_PETS } from '../mocks/pets.mock';
-import type { Pet } from '../types';
 
 type FavoritesState = {
   ids: string[];
@@ -9,7 +7,6 @@ type FavoritesState = {
   hydrate: () => Promise<void>;
   toggle: (petId: string) => Promise<void>;
   isFavorite: (petId: string) => boolean;
-  getFavoritePets: () => Pet[];
 };
 
 export const useFavoritesStore = create<FavoritesState>((set, get) => ({
@@ -31,9 +28,4 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
   },
 
   isFavorite: (petId) => get().ids.includes(petId),
-
-  getFavoritePets: () => {
-    const { ids } = get();
-    return MOCK_PETS.filter((p) => ids.includes(p.id));
-  },
 }));

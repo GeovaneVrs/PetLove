@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { petService } from '../services/pet.service';
 import { MOCK_USER } from '../data/user';
@@ -26,6 +27,7 @@ import { globalStyles } from '../styles/global';
 
 export default function HomeScreen() {
   const { colors, spacing, typography, radius, shadows } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<PetCategory | 'all'>('all');
@@ -57,7 +59,7 @@ export default function HomeScreen() {
         source={{ uri: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1200' }}
         style={[styles.banner, { borderBottomLeftRadius: radius.xl, borderBottomRightRadius: radius.xl }]}
       >
-        <View style={styles.bannerOverlay}>
+        <View style={[styles.bannerOverlay, { paddingTop: insets.top + spacing.lg }]}>
           <Text style={styles.bannerHello}>Olá, {MOCK_USER.name.split(' ')[0]}! 👋</Text>
           <Text style={styles.bannerTitle}>Encontre seu novo melhor amigo</Text>
           <Text style={styles.bannerSub}>Adote com amor e responsabilidade</Text>
@@ -86,8 +88,12 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: spacing.md, paddingBottom: spacing.lg }}
             renderItem={({ item }) => (
-              <View style={{ width: 280 }}>
-                <PetCard pet={item} onPress={() => openDetails(item.id)} />
+              <View style={{ width: 280, height: 300 }}>
+                <PetCard
+                  pet={item}
+                  featured
+                  onPress={() => openDetails(item.id)}
+                />
               </View>
             )}
           />

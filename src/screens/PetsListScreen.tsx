@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ROUTES } from '../constants/routes';
@@ -17,7 +18,8 @@ import { EmptyState } from '../components/EmptyState';
 import { globalStyles } from '../styles/global';
 
 export default function PetsListScreen() {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, typography } = useTheme();
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<MainTabParamList, typeof ROUTES.PETS_LIST>>();
   const [query, setQuery] = useState(route.params?.query ?? '');
@@ -30,7 +32,8 @@ export default function PetsListScreen() {
 
   return (
     <View style={[globalStyles.screen, { backgroundColor: colors.background }]}>
-      <View style={[globalStyles.screenPadding, { paddingTop: spacing.lg }]}>
+      <View style={[globalStyles.screenPadding, { paddingTop: insets.top + spacing.md }]}>
+        <Text style={[typography.h2, { color: colors.text, marginBottom: spacing.md }]}>Pets</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Buscar por nome, raça..." />
         <CategoryFilter selected={category} onSelect={setCategory} />
       </View>

@@ -14,7 +14,7 @@ type Props = {
 
 export function FavoriteButton({ petId, size = 22 }: Props) {
   const { colors } = useTheme();
-  const isFavorite = useFavoritesStore((s) => s.isFavorite(petId));
+  const isFavorite = useFavoritesStore((s) => s.ids.includes(petId));
   const toggle = useFavoritesStore((s) => s.toggle);
   const scale = useSharedValue(1);
 
