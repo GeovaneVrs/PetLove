@@ -56,11 +56,12 @@ export default function HomeScreen() {
       showsVerticalScrollIndicator={false}
     >
       <ImageBackground
-        source={{ uri: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1200' }}
+        source={require('../../assets/banner.png')}
+        resizeMode="cover"
         style={[styles.banner, { borderBottomLeftRadius: radius.xl, borderBottomRightRadius: radius.xl }]}
       >
         <View style={[styles.bannerOverlay, { paddingTop: insets.top + spacing.lg }]}>
-          <Text style={styles.bannerHello}>Olá, {MOCK_USER.name.split(' ')[0]}! 👋</Text>
+          <Text style={styles.bannerHello}>Olá, {MOCK_USER.name.split(' ')[0]}!</Text>
           <Text style={styles.bannerTitle}>Encontre seu novo melhor amigo</Text>
           <Text style={styles.bannerSub}>Adote com amor e responsabilidade</Text>
         </View>
