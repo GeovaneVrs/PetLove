@@ -13,14 +13,31 @@ Aplicativo mobile de adoção de pets construído com **React Native + Expo + Ty
 
 ## Stack
 
-React Native · Expo SDK 54 · TypeScript (compatível com Expo Go SDK 54)
+React Native · Expo SDK 54 · TypeScript · React Navigation (Stack + Tabs) · React Hook Form · Yup · AsyncStorage · Zustand · Reanimated · Expo Vector Icons
 
 ## Sensores (requisito acadêmico)
 
 | Sensor | Uso no app |
 |--------|------------|
 | **GPS** (`expo-location`) | Distância até abrigos em Recife + mapa na tela de detalhes |
-| **Câmera** (`expo-image-picker`) | Foto de perfil do usuário (câmera ou galeria) | · React Navigation (Stack + Tabs) · React Hook Form · Yup · AsyncStorage · Zustand · Reanimated · Expo Vector Icons
+| **Câmera** (`expo-image-picker`) | Foto de perfil e álbum do usuário (câmera ou galeria) |
+
+## Screenshots
+
+### Home
+![Tela inicial do PetLove](docs/screenshots/home.jpeg)
+
+### Lista de pets
+![Lista de pets com busca e filtros](docs/screenshots/pets.jpeg)
+
+### Detalhes do pet
+![Tela de detalhes com informações do pet](docs/screenshots/telapet.jpeg)
+
+### Perfil
+![Tela de perfil com álbum de fotos](docs/screenshots/perfil.jpeg)
+
+### Sensores (GPS e mapa)
+![Mapa e localização dos abrigos em Recife](docs/screenshots/sensor.jpeg)
 
 ## Estrutura
 
@@ -100,6 +117,19 @@ npm run start:tunnel
 > Usa **ngrok v3** (`@ngrok/ngrok`). Contas ngrok novas não aceitam mais o agente 2.x embutido no Expo (`ERR_NGROK_121`).
 
 > Feche VPN/antivírus se o túnel ainda cair. O script `kill-dev.ps1` libera a porta 8081 antes de subir.
+
+## Equipe
+
+| Integrante | Matrícula |
+|------------|-----------|
+| Ananda Almeida Ramos | 01791623 |
+| Caio Gabriel Medeiros dos Santos | 01832014 |
+| Geovane Valério Ribeiro da Silva | 01817390 |
+| Heitor Júlio de Souza Batista | 01807641 |
+| José Lúfyo César França Camelo | 01796241 |
+| Lieberty Wendell Queiroz de Holanda | 01811624 |
+| Rafael França Beuttenmuller | 01813899 |
+| Vanessa Camelo Lins do Nascimento | 01790811 |
 
 ---
 
