@@ -24,20 +24,30 @@ React Native · Expo SDK 54 · TypeScript · React Navigation (Stack + Tabs) · 
 
 ## Screenshots
 
-### Home
-![Tela inicial do PetLove](docs/screenshots/home.jpeg)
-
-### Lista de pets
-![Lista de pets com busca e filtros](docs/screenshots/pets.jpeg)
-
-### Detalhes do pet
-![Tela de detalhes com informações do pet](docs/screenshots/telapet.jpeg)
-
-### Perfil
-![Tela de perfil com álbum de fotos](docs/screenshots/perfil.jpeg)
-
-### Sensores (GPS e mapa)
-![Mapa e localização dos abrigos em Recife](docs/screenshots/sensor.jpeg)
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <b>Home</b><br />
+      <img src="docs/screenshots/home.jpeg" width="220" alt="Tela inicial" />
+    </td>
+    <td align="center" width="33%">
+      <b>Lista de pets</b><br />
+      <img src="docs/screenshots/pets.jpeg" width="220" alt="Lista de pets" />
+    </td>
+    <td align="center" width="33%">
+      <b>Detalhes</b><br />
+      <img src="docs/screenshots/telapet.jpeg" width="220" alt="Detalhes do pet" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="3">
+      <b>Perfil</b> &nbsp;&nbsp;|&nbsp;&nbsp; <b>Sensores (GPS)</b><br /><br />
+      <img src="docs/screenshots/perfil.jpeg" width="220" alt="Perfil" />
+      &nbsp;&nbsp;
+      <img src="docs/screenshots/sensor.jpeg" width="220" alt="Mapa e localização" />
+    </td>
+  </tr>
+</table>
 
 ## Estrutura
 
